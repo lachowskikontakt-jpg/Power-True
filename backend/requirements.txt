@@ -1,0 +1,11 @@
+Plaintext
+fastapi
+uvicorn
+motor
+pymongo
+python-dotenv
+pydantic
+pydantic[email]
+bcrypt
+PyJWT
+requests
