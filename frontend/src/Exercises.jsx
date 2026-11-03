@@ -8,7 +8,6 @@ export default function Exercises() {
   const categories = ['Wszystkie', 'Klatka', 'Plecy', 'Nogi', 'Barki', 'Ramiona', 'Brzuch', 'Cardio'];
 
   useEffect(() => {
-    // Pobieramy ćwiczenia z bazy danych
     api.get('/exercises')
       .then(res => setExercises(res.data))
       .catch(err => console.error('Błąd pobierania ćwiczeń:', err));
@@ -20,7 +19,6 @@ export default function Exercises() {
 
   return (
     <div style={{ backgroundColor: '#000000', color: '#f3f4f6', minHeight: '100vh', padding: '30px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-      {/* Nagłówek */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid #1f2937', paddingBottom: '20px' }}>
         <div>
           <h1 style={{ color: '#ffffff', fontSize: '2.5rem', fontWeight: '900', margin: '0', letterSpacing: '1px' }}>
@@ -30,7 +28,6 @@ export default function Exercises() {
         </div>
       </div>
 
-      {/* Przyciski kategorii */}
       <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '15px', marginBottom: '30px' }}>
         {categories.map(cat => (
           <button
@@ -45,7 +42,6 @@ export default function Exercises() {
               fontWeight: '700',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
-              transition: 'all 0.2s'
             }}
           >
             {cat}
@@ -53,7 +49,6 @@ export default function Exercises() {
         ))}
       </div>
 
-      {/* Siatka kafelków ćwiczeń */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
         {filteredExercises.length > 0 ? (
           filteredExercises.map((ex, index) => (
