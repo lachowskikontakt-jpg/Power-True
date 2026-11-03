@@ -8,3 +8,4 @@ pydantic[email]
 bcrypt
 PyJWT
 requests
+python-multipart
