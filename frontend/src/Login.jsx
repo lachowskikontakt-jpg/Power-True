@@ -9,15 +9,18 @@ export default function Login({ onLoginSuccess }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      console.log("Wysyłam żądanie logowania dla:", email);
       const response = await api.post('/api/auth/login', {
         email: email,
         password: password
       });
       
+      console.log("Odpowiedź serwera:", response.data);
       localStorage.setItem('token', response.data.token);
       onLoginSuccess();
     } catch (err) {
-      setError('Błędny e-mail lub hasło');
+      console.error("Szczegóły błędu logowania:", err.response || err);
+      setError(err.response?.data?.detail || 'Błędny e-mail lub hasło');
     }
   };
 
@@ -38,7 +41,7 @@ export default function Login({ onLoginSuccess }) {
               type="email" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="twojmail@gmail.com"
+              placeholder="lachowski.kontakt@gmail.com"
               style={{ width: '100%', padding: '12px 15px', borderRadius: '4px', backgroundColor: '#1a1a1a', border: '1px solid #333', color: 'white', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
               required 
             />
