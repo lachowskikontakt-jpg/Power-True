@@ -16,7 +16,6 @@ function App() {
 
   return (
     <div>
-      {/* Pórczny przycisk wylogowania w prawym górnym rogu */}
       <div style={{ backgroundColor: '#000000', borderBottom: '1px solid #1f2937', padding: '10px 30px', display: 'flex', justifyContent: 'flex-end' }}>
         <button 
           onClick={handleLogout}
