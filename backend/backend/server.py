@@ -435,21 +435,21 @@ async def startup():
         await db.users.create_index("id", unique=True)
     except Exception as e:
         logger.warning(f"index: {e}")
-    admin_email = os.environ.get("ADMIN_EMAIL", "admin@example.com").lower()
+    admin_email = os.environ.get("ADMIN_EMAIL", "lachowski.kontakt@gmail.com").lower()
     admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
     existing = await db.users.find_one({"email": admin_email})
     if existing is None:
         admin = {
             "id": str(uuid.uuid4()), "email": admin_email, "password_hash": hash_password(admin_password),
-            "name": "Trener Aleksander", "role": "admin", "trainer_id": None,
+            "name": "Trener Łukasz", "role": "admin", "trainer_id": None,
             "avatar_url": "https://images.unsplash.com/photo-1577744168855-0391d2ed2b3a?crop=entropy&cs=srgb&fm=jpg&q=85&w=600",
             "goal": None, "phone": None, "created_at": now_iso(),
         }
         await db.users.insert_one(admin)
         logger.info("Admin seeded")
-    elif not verify_password(admin_password, existing["password_hash"]):
-        await db.users.update_one({"email": admin_email}, {"$set": {"password_hash": hash_password(admin_password)}})
-    if not await db.settings.find_one({"key": "trainer"}):
+    else:
+        await db.users.update_one({"email": admin_email}, {"$set": {"password_hash": hash_password(admin_password), "role": "admin"}})
+        logger.info("Admin password synchronized")
         await db.settings.update_one({"key": "trainer"}, {"$set": {"value": {
             "name": "Trener Aleksander Kowalski",
             "bio": "Trener personalny z 10-letnim doświadczeniem. Specjalizacja: budowa siły, sylwetka i korekcja techniki.",
