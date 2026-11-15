@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import api from './api';
+import { TrainerCardWidget, ProgressHistoryWidget } from './TraineeWidgets';
 
 export default function TraineeDashboard({ onLogout }) {
   const [plans, setPlans] = useState([]);
+  const [trainer, setTrainer] = useState(null);
+  const [progressLogs, setProgressLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
@@ -10,12 +13,16 @@ export default function TraineeDashboard({ onLogout }) {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [plansRes, msgsRes] = await Promise.all([
+      const [plansRes, msgsRes, trainerRes, progRes] = await Promise.all([
         api.get('/api/plans'),
-        api.get('/api/messages')
+        api.get('/api/messages'),
+        api.get('/api/trainer'),
+        api.get('/api/progress')
       ]);
       setPlans(plansRes.data);
       setMessages(msgsRes.data);
+      setTrainer(trainerRes.data);
+      setProgressLogs(progRes.data);
     } catch (err) {
       console.error('Błąd pobierania danych podopiecznego:', err);
     }
@@ -29,6 +36,8 @@ export default function TraineeDashboard({ onLogout }) {
   const handleLogWorkout = async (planId) => {
     try {
       await api.post(`/api/plans/${planId}/log`);
+      const progRes = await api.get('/api/progress');
+      setProgressLogs(progRes.data);
       alert('Trening zapisany w dzienniku postępów!');
     } catch (err) {
       console.error('Błąd zapisu sesji:', err);
@@ -60,6 +69,8 @@ export default function TraineeDashboard({ onLogout }) {
       </nav>
 
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '30px 20px' }}>
+        <TrainerCardWidget trainer={trainer} />
+
         <h1 style={{ color: '#ffffff', fontSize: '2rem', fontWeight: '900', marginBottom: '5px' }}>
           TWOJE <span style={{ color: '#EF4444' }}>PLANY TRENINGOWE</span>
         </h1>
@@ -68,7 +79,7 @@ export default function TraineeDashboard({ onLogout }) {
         {loading ? (
           <p style={{ color: '#6b7280' }}>Ładowanie planów...</p>
         ) : plans.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '40px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '35px' }}>
             {plans.map(plan => (
               <div key={plan.id} style={{ backgroundColor: '#121212', border: '1px solid #1f2937', borderRadius: '8px', padding: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', flexWrap: 'wrap', gap: '10px' }}>
@@ -103,12 +114,14 @@ export default function TraineeDashboard({ onLogout }) {
             ))}
           </div>
         ) : (
-          <div style={{ backgroundColor: '#121212', border: '1px solid #1f2937', borderRadius: '8px', padding: '30px', textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ backgroundColor: '#121212', border: '1px solid #1f2937', borderRadius: '8px', padding: '30px', textAlign: 'center', marginBottom: '35px' }}>
             <p style={{ color: '#9ca3af', margin: 0 }}>Twój trener nie przypisał jeszcze żadnego planu treningowego.</p>
           </div>
         )}
 
-        {/* Szybki czat z trenerem */}
+        <ProgressHistoryWidget logs={progressLogs} />
+
+        {/* Czat z trenerem */}
         <div style={{ backgroundColor: '#121212', border: '1px solid #1f2937', borderRadius: '8px', padding: '20px' }}>
           <h3 style={{ color: '#ffffff', fontSize: '1.2rem', fontWeight: '800', marginTop: 0, marginBottom: '15px' }}>
             WIADOMOŚCI DO <span style={{ color: '#EF4444' }}>TRENERA</span>
