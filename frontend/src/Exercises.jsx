@@ -1,20 +1,14 @@
 import { useState, useEffect } from 'react';
 import api from './api';
+import { ExerciseDetailModal, ExerciseFormModal } from './ExerciseModals';
 
 export default function Exercises() {
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('Wszystkie');
-  
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-
-  const [name, setName] = useState('');
-  const [muscleGroup, setMuscleGroup] = useState('Klatka');
-  const [imageUrl, setImageUrl] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
-  const [instructions, setInstructions] = useState('');
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingExercise, setEditingExercise] = useState(null);
 
   const categories = ['Wszystkie', 'Klatka', 'Plecy', 'Nogi', 'Barki', 'Ramiona', 'Brzuch', 'Cardio', 'Inne'];
 
@@ -35,92 +29,22 @@ export default function Exercises() {
     fetchExercises();
   }, []);
 
-  const openAddModal = () => {
-    setEditingId(null);
-    setName('');
-    setMuscleGroup('Klatka');
-    setImageUrl('');
-    setVideoUrl('');
-    setInstructions('');
-    setIsModalOpen(true);
-  };
-
-  const openEditModal = (ex) => {
-    setEditingId(ex.id);
-    setName(ex.name || '');
-    setMuscleGroup(ex.muscle_group || 'Klatka');
-    setImageUrl(ex.image_url || '');
-    setVideoUrl(ex.video_url || '');
-    setInstructions(ex.instructions || '');
-    setSelectedExercise(null);
-    setIsModalOpen(true);
-  };
-
-  const handleSaveExercise = (e) => {
-    e.preventDefault();
-    const payload = {
-      name,
-      muscle_group: muscleGroup,
-      image_url: imageUrl || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800',
-      video_url: videoUrl || null,
-      instructions
-    };
-
-    const request = editingId 
-      ? api.put(`/api/exercises/${editingId}`, payload)
-      : api.post('/api/exercises', payload);
-
-    request
-      .then(() => {
-        setIsModalOpen(false);
-        fetchExercises();
-      })
-      .catch(err => console.error('Błąd zapisu ćwiczenia:', err));
-  };
-
-  const handleDeleteExercise = (id) => {
-    if (!window.confirm('Na pewno chcesz usunąć to ćwiczenie?')) return;
-    api.delete(`/api/exercises/${id}`)
-      .then(() => {
-        setSelectedExercise(null);
-        fetchExercises();
-      })
-      .catch(err => console.error('Błąd usuwania:', err));
-  };
-
-  const getEmbedUrl = (url) => {
-    if (!url) return null;
-    if (url.includes('youtube.com/watch?v=')) {
-      const videoId = url.split('v=')[1]?.split('&')[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-    if (url.includes('youtu.be/')) {
-      const videoId = url.split('youtu.be/')[1]?.split('?')[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-    if (url.includes('youtube.com/shorts/')) {
-      const videoId = url.split('shorts/')[1]?.split('?')[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-    return null;
-  };
-
-  const filteredExercises = filter === 'Wszystkie' 
-    ? exercises 
+  const filteredExercises = filter === 'Wszystkie'
+    ? exercises
     : exercises.filter(ex => (ex.muscle_group || ex.category) === filter);
 
   return (
     <div style={{ backgroundColor: '#000000', color: '#f3f4f6', minHeight: '100vh', padding: '30px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid #1f2937', paddingBottom: '20px', flexWrap: 'wrap', gap: '15px' }}>
         <div>
-          <h1 style={{ color: '#ffffff', fontSize: '2.5rem', fontWeight: '900', margin: '0', letterSpacing: '1px' }}>
+          <h1 style={{ color: '#ffffff', fontSize: '2.5rem', fontWeight: '900', margin: 0, letterSpacing: '1px' }}>
             ATLAS <span style={{ color: '#EF4444' }}>ĆWICZEŃ</span>
           </h1>
           <p style={{ color: '#9ca3af', margin: '5px 0 0', fontSize: '0.95rem' }}>Baza wszystkich ćwiczeń z opisem, techniką wykonania i wideo.</p>
         </div>
-        <button 
-          onClick={openAddModal}
-          style={{ backgroundColor: '#EF4444', color: '#ffffff', border: 'none', padding: '12px 20px', borderRadius: '6px', fontWeight: '800', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.5px' }}
+        <button
+          onClick={() => { setEditingExercise(null); setIsFormOpen(true); }}
+          style={{ backgroundColor: '#EF4444', color: '#ffffff', border: 'none', padding: '12px 20px', borderRadius: '6px', fontWeight: '800', cursor: 'pointer', textTransform: 'uppercase' }}
         >
           + Dodaj ćwiczenie
         </button>
@@ -154,17 +78,13 @@ export default function Exercises() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
           {filteredExercises.length > 0 ? (
             filteredExercises.map((ex) => (
-              <div 
-                key={ex.id} 
+              <div
+                key={ex.id}
                 onClick={() => setSelectedExercise(ex)}
                 style={{ backgroundColor: '#121212', border: '1px solid #1f2937', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}
               >
                 <div style={{ height: '170px', overflow: 'hidden', backgroundColor: '#1a1a1a', position: 'relative' }}>
-                  <img 
-                    src={ex.image_url || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800'} 
-                    alt={ex.name} 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
+                  <img src={ex.image_url || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800'} alt={ex.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   {ex.video_url && (
                     <span style={{ position: 'absolute', bottom: '10px', right: '10px', backgroundColor: 'rgba(0,0,0,0.8)', color: '#EF4444', padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: '800', border: '1px solid #EF4444' }}>
                       ▶ WIDEO
@@ -176,7 +96,7 @@ export default function Exercises() {
                     {ex.muscle_group || ex.category || 'Ogólne'}
                   </span>
                   <h3 style={{ color: '#ffffff', fontSize: '1.2rem', fontWeight: '800', margin: '12px 0 8px' }}>{ex.name}</h3>
-                  <p style={{ color: '#9ca3af', fontSize: '0.85rem', margin: '0', lineHeight: '1.5', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                  <p style={{ color: '#9ca3af', fontSize: '0.85rem', margin: 0, lineHeight: '1.5' }}>
                     {ex.instructions || 'Kliknij, aby zobaczyć szczegóły i opis techniczny.'}
                   </p>
                 </div>
@@ -188,5 +108,20 @@ export default function Exercises() {
         </div>
       )}
 
-      {selectedExercise && (
-        <div style={{ position: 'fixed', top
+      <ExerciseDetailModal
+        exercise={selectedExercise}
+        onClose={() => setSelectedExercise(null)}
+        onEdit={(ex) => { setSelectedExercise(null); setEditingExercise(ex); setIsFormOpen(true); }}
+        onDeleted={() => { setSelectedExercise(null); fetchExercises(); }}
+      />
+
+      <ExerciseFormModal
+        isOpen={isFormOpen}
+        editingExercise={editingExercise}
+        categories={categories}
+        onClose={() => setIsFormOpen(false)}
+        onSaved={() => { setIsFormOpen(false); fetchExercises(); }}
+      />
+    </div>
+  );
+}
