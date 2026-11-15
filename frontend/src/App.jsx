@@ -4,6 +4,7 @@ import Login from './Login';
 import Exercises from './Exercises';
 import Plans from './Plans';
 import Clients from './Clients';
+import Chat from './Chat';
 import TraineeDashboard from './TraineeDashboard';
 
 function App() {
@@ -68,6 +69,7 @@ function App() {
             <button onClick={() => setActiveTab('exercises')} style={navBtnStyle('exercises')}>Atlas Ćwiczeń</button>
             <button onClick={() => setActiveTab('plans')} style={navBtnStyle('plans')}>Plany Treningowe</button>
             <button onClick={() => setActiveTab('clients')} style={navBtnStyle('clients')}>Podopieczni</button>
+            <button onClick={() => setActiveTab('chat')} style={navBtnStyle('chat')}>Wiadomości</button>
           </div>
         </div>
 
@@ -79,6 +81,7 @@ function App() {
       {activeTab === 'exercises' && <Exercises />}
       {activeTab === 'plans' && <Plans />}
       {activeTab === 'clients' && <Clients />}
+      {activeTab === 'chat' && <Chat />}
     </div>
   );
 }
