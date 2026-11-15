@@ -1,20 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import api from './api';
 import Login from './Login';
 import Exercises from './Exercises';
 import Plans from './Plans';
 import Clients from './Clients';
+import TraineeDashboard from './TraineeDashboard';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
+  const [role, setRole] = useState(localStorage.getItem('userRole') || 'admin');
   const [activeTab, setActiveTab] = useState('exercises');
+
+  useEffect(() => {
+    if (!token) return;
+    api.get('/api/auth/me')
+      .then(res => {
+        const fetchedRole = res.data?.role || 'trainee';
+        setRole(fetchedRole);
+        localStorage.setItem('userRole', fetchedRole);
+      })
+      .catch(() => {});
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
     setToken(null);
   };
 
   if (!token) {
-    return <Login onLoginSuccess={() => setToken(localStorage.getItem('token'))} />;
+    return (
+      <Login
+        onLoginSuccess={() => {
+          setToken(localStorage.getItem('token'));
+          setRole(localStorage.getItem('userRole') || 'admin');
+        }}
+      />
+    );
+  }
+
+  if (role !== 'admin') {
+    return <TraineeDashboard onLogout={handleLogout} />;
   }
 
   const navBtnStyle = (tabName) => ({
@@ -37,7 +63,7 @@ function App() {
           <div style={{ color: '#ffffff', fontWeight: '900', fontSize: '1.3rem', letterSpacing: '1px' }}>
             POWER <span style={{ color: '#EF4444' }}>TRUE</span>
           </div>
-          
+
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             <button onClick={() => setActiveTab('exercises')} style={navBtnStyle('exercises')}>Atlas Ćwiczeń</button>
             <button onClick={() => setActiveTab('plans')} style={navBtnStyle('plans')}>Plany Treningowe</button>
