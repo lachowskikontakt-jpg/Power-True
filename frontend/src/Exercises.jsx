@@ -6,12 +6,10 @@ export default function Exercises() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('Wszystkie');
   
-  // Stany dla modali (podgląd, dodawanie, edycja)
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
-  // Pola formularza
   const [name, setName] = useState('');
   const [muscleGroup, setMuscleGroup] = useState('Klatka');
   const [imageUrl, setImageUrl] = useState('');
@@ -90,7 +88,6 @@ export default function Exercises() {
       .catch(err => console.error('Błąd usuwania:', err));
   };
 
-  // Konwersja linków YouTube na format embed do odtwarzacza
   const getEmbedUrl = (url) => {
     if (!url) return null;
     if (url.includes('youtube.com/watch?v=')) {
@@ -114,8 +111,6 @@ export default function Exercises() {
 
   return (
     <div style={{ backgroundColor: '#000000', color: '#f3f4f6', minHeight: '100vh', padding: '30px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-      
-      {/* Nagłówek i przycisk dodawania */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid #1f2937', paddingBottom: '20px', flexWrap: 'wrap', gap: '15px' }}>
         <div>
           <h1 style={{ color: '#ffffff', fontSize: '2.5rem', fontWeight: '900', margin: '0', letterSpacing: '1px' }}>
@@ -131,7 +126,6 @@ export default function Exercises() {
         </button>
       </div>
 
-      {/* Pasek kategorii */}
       <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '15px', marginBottom: '30px' }}>
         {categories.map(cat => (
           <button
@@ -154,7 +148,6 @@ export default function Exercises() {
         ))}
       </div>
 
-      {/* Siatka kafelków ćwiczeń */}
       {loading ? (
         <p style={{ color: '#6b7280', textAlign: 'center', padding: '40px' }}>Ładowanie ćwiczeń z bazy danych...</p>
       ) : (
@@ -190,4 +183,10 @@ export default function Exercises() {
               </div>
             ))
           ) : (
-            <p style={{ color: '#6
+            <p style={{ color: '#6b7280', gridColumn: '1 / -1', textAlign: 'center', padding: '40px' }}>Brak ćwiczeń w tej kategorii.</p>
+          )}
+        </div>
+      )}
+
+      {selectedExercise && (
+        <div style={{ position: 'fixed', top
