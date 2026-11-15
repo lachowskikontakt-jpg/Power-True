@@ -31,6 +31,40 @@ export default function TrainerProfile() {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxSize = 400;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height && width > maxSize) {
+          height = Math.round((height * maxSize) / width);
+          width = maxSize;
+        } else if (height > maxSize) {
+          width = Math.round((width * maxSize) / height);
+          height = maxSize;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        handleChange('avatar_url', compressedDataUrl);
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -58,7 +92,25 @@ export default function TrainerProfile() {
           <p style={{ color: '#9ca3af', margin: '5px 0 0', fontSize: '0.9rem' }}>Dane kontaktowe i opis widoczne dla Twoich podopiecznych.</p>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ backgroundColor: '#121212', border: '1px solid #1f2937', borderRadius: '8px', padding: '25px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <form onSubmit={handleSubmit} style={{ backgroundColor: '#121212', border: '1px solid #1f2937', borderRadius: '8px', padding: '25px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+          
+          {/* Podgląd i wybór pliku zdjęcia */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', backgroundColor: '#1a1a1a', padding: '15px', borderRadius: '6px', border: '1px solid #262626', flexWrap: 'wrap' }}>
+            <img
+              src={form.avatar_url || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400'}
+              alt="Zdjęcie trenera"
+              style={{ width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #EF4444' }}
+            />
+            <div style={{ flex: 1 }}>
+              <label style={{ ...labelStyle, color: '#ffffff', marginBottom: '8px' }}>Zdjęcie profilowe</label>
+              <label style={{ display: 'inline-block', backgroundColor: '#1f2937', color: '#ffffff', border: '1px solid #EF4444', padding: '8px 14px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: '700', cursor: 'pointer' }}>
+                📷 Wybierz zdjęcie z dysku / telefonu
+                <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: 'none' }} />
+              </label>
+              <p style={{ color: '#6b7280', fontSize: '0.75rem', margin: '6px 0 0' }}>Obsługiwane formaty: JPG, PNG, WebP.</p>
+            </div>
+          </div>
+
           <div>
             <label style={labelStyle}>Imię i nazwisko / Nazwa trenera</label>
             <input type="text" value={form.name || ''} onChange={e => handleChange('name', e.target.value)} style={inputStyle} />
@@ -89,11 +141,6 @@ export default function TrainerProfile() {
               <label style={labelStyle}>Instagram</label>
               <input type="text" value={form.instagram || ''} onChange={e => handleChange('instagram', e.target.value)} placeholder="@twoj_profil" style={inputStyle} />
             </div>
-          </div>
-
-          <div>
-            <label style={labelStyle}>Link do zdjęcia profilowego (URL)</label>
-            <input type="url" value={form.avatar_url || ''} onChange={e => handleChange('avatar_url', e.target.value)} placeholder="https://..." style={inputStyle} />
           </div>
 
           <button type="submit" style={{ backgroundColor: '#EF4444', color: '#ffffff', border: 'none', padding: '14px', borderRadius: '4px', fontWeight: '800', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '6px' }}>
