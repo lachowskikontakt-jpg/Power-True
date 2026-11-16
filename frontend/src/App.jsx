@@ -62,8 +62,18 @@ function App() {
     <div style={{ backgroundColor: '#000000', minHeight: '100vh' }}>
       <nav style={{ backgroundColor: '#0a0a0a', borderBottom: '1px solid #1f2937', padding: '15px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '25px', flexWrap: 'wrap' }}>
-          <div style={{ color: '#ffffff', fontWeight: '900', fontSize: '1.3rem', letterSpacing: '1px' }}>
-            POWER <span style={{ color: '#EF4444' }}>TRUE</span>
+          <div
+            onClick={() => setActiveTab('exercises')}
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+          >
+            <img
+              src="/icon.svg"
+              alt="Power True Logo"
+              style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'contain' }}
+            />
+            <div style={{ color: '#ffffff', fontWeight: '900', fontSize: '1.3rem', letterSpacing: '1px' }}>
+              POWER <span style={{ color: '#EF4444' }}>TRUE</span>
+            </div>
           </div>
 
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
