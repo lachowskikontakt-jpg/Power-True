@@ -56,35 +56,14 @@ export default function Login({ onLoginSuccess }) {
       `}</style>
 
       <div style={{ backgroundColor: '#121212', padding: '40px 30px', borderRadius: '8px', width: '100%', maxWidth: '400px', border: '1px solid #1f2937', boxShadow: '0 10px 25px rgba(0,0,0,0.8)' }}>
-        {/* Sama sztanga bez obramówki i napisów */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
-          <svg viewBox="25 170 462 172" style={{ width: '210px', height: 'auto', display: 'block' }}>
-            <rect x="160" y="250" width="192" height="12" fill="#9ca3af"/>
-            <rect x="172" y="250" width="60" height="12" fill="#e5e7eb"/>
-            <rect x="280" y="250" width="60" height="12" fill="#e5e7eb"/>
-            <rect x="253" y="250" width="6" height="12" fill="#EF4444"/>
-            <rect x="34" y="245" width="126" height="22" rx="2" fill="#d1d5db"/>
-            <rect x="352" y="245" width="126" height="22" rx="2" fill="#d1d5db"/>
-            <rect x="152" y="232" width="10" height="48" rx="1" fill="#ffffff"/>
-            <rect x="350" y="232" width="10" height="48" rx="1" fill="#ffffff"/>
-            <rect x="127" y="178" width="22" height="156" rx="2" fill="#EF4444"/>
-            <rect x="106" y="178" width="18" height="156" rx="2" fill="#2563EB"/>
-            <rect x="88" y="188" width="15" height="136" rx="2" fill="#FACC15"/>
-            <rect x="73" y="199" width="12" height="114" rx="2" fill="#16A34A"/>
-            <rect x="62" y="211" width="8" height="90" rx="2" fill="#FFFFFF"/>
-            <rect x="363" y="178" width="22" height="156" rx="2" fill="#EF4444"/>
-            <rect x="388" y="178" width="18" height="156" rx="2" fill="#2563EB"/>
-            <rect x="409" y="188" width="15" height="136" rx="2" fill="#FACC15"/>
-            <rect x="427" y="199" width="12" height="114" rx="2" fill="#16A34A"/>
-            <rect x="442" y="211" width="8" height="90" rx="2" fill="#FFFFFF"/>
-          </svg>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '18px' }}>
+          <img
+            src="/icon.svg"
+            alt="Power True Logo"
+            style={{ width: '124px', height: '124px', borderRadius: '26px', objectFit: 'contain', display: 'block', boxShadow: '0 8px 20px rgba(0, 0, 0, 0.8)' }}
+          />
         </div>
 
-        {/* Nowa, mocna czcionka dla tytułu POWER TRUE */}
-        <h1 style={{ fontFamily: "'Arial Black', Impact, sans-serif", textAlign: 'center', margin: '0 0 8px', fontSize: '2.2rem', fontWeight: '900', letterSpacing: '2px', fontStyle: 'italic' }}>
-          <span style={{ color: '#ffffff', textShadow: '3px 3px 0px rgba(239, 68, 68, 0.45)' }}>POWER</span>{' '}
-          <span style={{ color: '#EF4444', textShadow: '3px 3px 0px rgba(255, 255, 255, 0.15)' }}>TRUE</span>
-        </h1>
         <p style={{ color: '#9ca3af', textAlign: 'center', marginBottom: '25px', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
           {isRegister ? 'Rejestracja Podopiecznego' : 'Panel Treningowy'}
         </p>
