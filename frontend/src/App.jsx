@@ -55,24 +55,43 @@ function App() {
     cursor: 'pointer',
     fontSize: '0.8rem',
     textTransform: 'uppercase',
-    letterSpacing: '0.5px'
+    letterSpacing: '0.5px',
+    fontFamily: 'system-ui, -apple-system, sans-serif'
   });
 
   return (
-    <div style={{ backgroundColor: '#000000', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#000000', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       <nav style={{ backgroundColor: '#0a0a0a', borderBottom: '1px solid #1f2937', padding: '15px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '25px', flexWrap: 'wrap' }}>
           <div
             onClick={() => setActiveTab('exercises')}
             style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
           >
-            <img
-              src="/icon.svg"
-              alt="Power True Logo"
-              style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'contain' }}
-            />
-            <div style={{ color: '#ffffff', fontWeight: '900', fontSize: '1.3rem', letterSpacing: '1px' }}>
-              POWER <span style={{ color: '#EF4444' }}>TRUE</span>
+            {/* Sama sztanga w pasku nawigacji */}
+            <svg viewBox="25 170 462 172" style={{ width: '74px', height: 'auto', display: 'block' }}>
+              <rect x="160" y="250" width="192" height="12" fill="#9ca3af"/>
+              <rect x="172" y="250" width="60" height="12" fill="#e5e7eb"/>
+              <rect x="280" y="250" width="60" height="12" fill="#e5e7eb"/>
+              <rect x="253" y="250" width="6" height="12" fill="#EF4444"/>
+              <rect x="34" y="245" width="126" height="22" rx="2" fill="#d1d5db"/>
+              <rect x="352" y="245" width="126" height="22" rx="2" fill="#d1d5db"/>
+              <rect x="152" y="232" width="10" height="48" rx="1" fill="#ffffff"/>
+              <rect x="350" y="232" width="10" height="48" rx="1" fill="#ffffff"/>
+              <rect x="127" y="178" width="22" height="156" rx="2" fill="#EF4444"/>
+              <rect x="106" y="178" width="18" height="156" rx="2" fill="#2563EB"/>
+              <rect x="88" y="188" width="15" height="136" rx="2" fill="#FACC15"/>
+              <rect x="73" y="199" width="12" height="114" rx="2" fill="#16A34A"/>
+              <rect x="62" y="211" width="8" height="90" rx="2" fill="#FFFFFF"/>
+              <rect x="363" y="178" width="22" height="156" rx="2" fill="#EF4444"/>
+              <rect x="388" y="178" width="18" height="156" rx="2" fill="#2563EB"/>
+              <rect x="409" y="188" width="15" height="136" rx="2" fill="#FACC15"/>
+              <rect x="427" y="199" width="12" height="114" rx="2" fill="#16A34A"/>
+              <rect x="442" y="211" width="8" height="90" rx="2" fill="#FFFFFF"/>
+            </svg>
+
+            <div style={{ fontFamily: "'Arial Black', Impact, sans-serif", fontWeight: '900', fontSize: '1.4rem', letterSpacing: '1.5px', lineHeight: 1, fontStyle: 'italic' }}>
+              <span style={{ color: '#ffffff', textShadow: '2px 2px 0px rgba(239, 68, 68, 0.45)' }}>POWER</span>{' '}
+              <span style={{ color: '#EF4444', textShadow: '2px 2px 0px rgba(255, 255, 255, 0.15)' }}>TRUE</span>
             </div>
           </div>
 
@@ -85,7 +104,7 @@ function App() {
           </div>
         </div>
 
-        <button onClick={handleLogout} style={{ backgroundColor: 'transparent', color: '#9ca3af', border: '1px solid #333', padding: '6px 14px', borderRadius: '4px', fontWeight: '700', cursor: 'pointer', fontSize: '0.85rem' }}>
+        <button onClick={handleLogout} style={{ backgroundColor: 'transparent', color: '#9ca3af', border: '1px solid #333', padding: '6px 14px', borderRadius: '4px', fontWeight: '700', cursor: 'pointer', fontSize: '0.85rem', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
           Wyloguj się
         </button>
       </nav>
