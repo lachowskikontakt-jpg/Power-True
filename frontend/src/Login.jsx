@@ -27,7 +27,15 @@ export default function Login({ onLoginSuccess }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#000000', color: '#f3f4f6', fontFamily: 'system-ui, -apple-system, sans-serif', padding: '20px' }}>
       <div style={{ backgroundColor: '#121212', padding: '40px 30px', borderRadius: '8px', width: '100%', maxWidth: '400px', border: '1px solid #1f2937', boxShadow: '0 10px 25px rgba(0,0,0,0.8)' }}>
-        <h1 style={{ color: '#ffffff', textAlign: 'center', marginBottom: '8px', fontSize: '2rem', fontWeight: '900', letterSpacing: '1px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+          <img
+            src="/icon.svg"
+            alt="Power True Logo"
+            style={{ width: '96px', height: '96px', borderRadius: '22px', objectFit: 'contain', boxShadow: '0 8px 20px rgba(0, 0, 0, 0.7)' }}
+          />
+        </div>
+
+        <h1 style={{ color: '#ffffff', textAlign: 'center', margin: '0 0 8px', fontSize: '2rem', fontWeight: '900', letterSpacing: '1px' }}>
           POWER <span style={{ color: '#EF4444' }}>TRUE</span>
         </h1>
         <p style={{ color: '#9ca3af', textAlign: 'center', marginBottom: '25px', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
