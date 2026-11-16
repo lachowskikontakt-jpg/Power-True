@@ -24,14 +24,43 @@ export default function Login({ onLoginSuccess }) {
     }
   };
 
+  const inputStyle = {
+    width: '100%',
+    padding: '12px',
+    borderRadius: '4px',
+    backgroundColor: '#1a1a1a',
+    border: '1px solid #333',
+    color: '#ffffff',
+    fontSize: '1rem',
+    boxSizing: 'border-box',
+    outline: 'none'
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#000000', color: '#f3f4f6', fontFamily: 'system-ui, -apple-system, sans-serif', padding: '20px' }}>
+      {/* Blokada białego/jasnoniebieskiego tła autouzupełniania przeglądarki */}
+      <style>{`
+        .pt-input:-webkit-autofill,
+        .pt-input:-webkit-autofill:hover,
+        .pt-input:-webkit-autofill:focus,
+        .pt-input:-webkit-autofill:active {
+          -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+          -webkit-text-fill-color: #ffffff !important;
+          caret-color: #ffffff !important;
+          border: 1px solid #333 !important;
+          transition: background-color 5000s ease-in-out 0s;
+        }
+        .pt-input:focus {
+          border-color: #EF4444 !important;
+        }
+      `}</style>
+
       <div style={{ backgroundColor: '#121212', padding: '40px 30px', borderRadius: '8px', width: '100%', maxWidth: '400px', border: '1px solid #1f2937', boxShadow: '0 10px 25px rgba(0,0,0,0.8)' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '18px' }}>
           <img
             src="/icon.svg"
             alt="Power True Logo"
-            style={{ width: '96px', height: '96px', borderRadius: '22px', objectFit: 'contain', boxShadow: '0 8px 20px rgba(0, 0, 0, 0.7)' }}
+            style={{ width: '104px', height: '104px', borderRadius: '22px', objectFit: 'contain', display: 'block', boxShadow: '0 8px 20px rgba(0, 0, 0, 0.8)' }}
           />
         </div>
 
@@ -52,18 +81,18 @@ export default function Login({ onLoginSuccess }) {
           {isRegister && (
             <div>
               <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#9ca3af', marginBottom: '6px', textTransform: 'uppercase' }}>Imię i nazwisko</label>
-              <input type="text" value={name} onChange={e => setName(e.target.value)} required placeholder="Jan Kowalski" style={{ width: '100%', padding: '12px', borderRadius: '4px', backgroundColor: '#1a1a1a', border: '1px solid #333', color: 'white', fontSize: '1rem', boxSizing: 'border-box' }} />
+              <input className="pt-input" type="text" value={name} onChange={e => setName(e.target.value)} required placeholder="Jan Kowalski" style={inputStyle} />
             </div>
           )}
 
           <div>
             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#9ca3af', marginBottom: '6px', textTransform: 'uppercase' }}>E-mail</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="twoj@email.pl" style={{ width: '100%', padding: '12px', borderRadius: '4px', backgroundColor: '#1a1a1a', border: '1px solid #333', color: 'white', fontSize: '1rem', boxSizing: 'border-box' }} />
+            <input className="pt-input" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="twoj@email.pl" style={inputStyle} />
           </div>
 
           <div>
             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#9ca3af', marginBottom: '6px', textTransform: 'uppercase' }}>Hasło</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required style={{ width: '100%', padding: '12px', borderRadius: '4px', backgroundColor: '#1a1a1a', border: '1px solid #333', color: 'white', fontSize: '1rem', boxSizing: 'border-box' }} />
+            <input className="pt-input" type="password" value={password} onChange={e => setPassword(e.target.value)} required style={inputStyle} />
           </div>
 
           <button type="submit" style={{ backgroundColor: '#EF4444', color: '#ffffff', padding: '14px', borderRadius: '4px', border: 'none', fontWeight: '800', fontSize: '0.95rem', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '6px' }}>
