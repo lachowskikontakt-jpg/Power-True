@@ -132,6 +132,12 @@ class ProfileIn(BaseModel):
     phone: Optional[str] = None
     avatar_url: Optional[str] = None
 
+class TraineeUpdateIn(BaseModel):
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    goal: Optional[str] = None
+    phone: Optional[str] = None
+
 class ExerciseIn(BaseModel):
     name: str
     muscle_group: str = "Inne"
@@ -378,6 +384,40 @@ async def get_trainee(trainee_id: str, user: dict = Depends(require_admin)):
     plans = await db.plans.find({"trainee_id": trainee_id, "is_deleted": {"$ne": True}}, {"_id": 0}).to_list(1000)
     logs = await db.progress_logs.find({"trainee_id": trainee_id}, {"_id": 0}).sort("date", 1).to_list(5000)
     return {"trainee": t, "plans": plans, "logs": logs}
+
+@api_router.put("/trainees/{trainee_id}")
+async def update_trainee(trainee_id: str, data: TraineeUpdateIn, user: dict = Depends(require_admin)):
+    t = await db.users.find_one({"id": trainee_id, "role": "trainee"})
+    if not t:
+        raise HTTPException(status_code=404, detail="Podopieczny nie znaleziony")
+    updates = {}
+    if data.name is not None:
+        updates["name"] = data.name
+    if data.goal is not None:
+        updates["goal"] = data.goal
+    if data.phone is not None:
+        updates["phone"] = data.phone
+    if data.email is not None:
+        new_email = data.email.lower()
+        existing = await db.users.find_one({"email": new_email, "id": {"$ne": trainee_id}})
+        if existing:
+            raise HTTPException(status_code=400, detail="Ten e-mail jest już zajęty")
+        updates["email"] = new_email
+    if updates:
+        await db.users.update_one({"id": trainee_id}, {"$set": updates})
+    fresh = await db.users.find_one({"id": trainee_id}, {"_id": 0, "password_hash": 0})
+    return fresh
+
+@api_router.delete("/trainees/{trainee_id}")
+async def delete_trainee(trainee_id: str, user: dict = Depends(require_admin)):
+    t = await db.users.find_one({"id": trainee_id, "role": "trainee"})
+    if not t:
+        raise HTTPException(status_code=404, detail="Podopieczny nie znaleziony")
+    await db.users.delete_one({"id": trainee_id})
+    await db.plans.delete_many({"trainee_id": trainee_id})
+    await db.progress_logs.delete_many({"trainee_id": trainee_id})
+    await db.messages.delete_many({"trainee_id": trainee_id})
+    return {"ok": True}
 
 # ------------------- Trainer profile -------------------
 @api_router.get("/trainer")
